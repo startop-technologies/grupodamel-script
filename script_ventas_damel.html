@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Script de Ventas · Galería Damel</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0E0D0B;
+  --surface: #161512;
+  --surface2: #1E1C19;
+  --surface3: #262420;
+  --orange: #E8834A;
+  --orange-soft: #F0A070;
+  --orange-dim: #E8834A14;
+  --orange-glow: #E8834A35;
+  --gold: #C8A96E;
+  --gold-dim: #C8A96E12;
+  --white: #EDE9E3;
+  --muted: #7A7268;
+  --border: rgba(255,255,255,0.05);
+  --border2: rgba(255,255,255,0.09);
+  --green: #5CAD7A;
+  --green-dim: #5CAD7A12;
+  --red: #C96060;
+  --red-dim: #C9606012;
+  --teal: #4AAEAD;
+  --teal-dim: #4AAEAD12;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  padding: 0;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 10%, #E8834A0A 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 90%, #C8A96E07 0%, transparent 45%);
+  pointer-events: none; z-index: 0;
+}
+
+/* GRAIN */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+.app { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 48px 32px 80px; }
+
+/* HEADER */
+.header { margin-bottom: 56px; }
+.header-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 16px;
+}
+.header-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 300; line-height: 1.05;
+  letter-spacing: -0.02em; color: var(--white);
+  margin-bottom: 8px;
+}
+.header-title em { font-style: italic; color: var(--orange-soft); }
+.header-sub {
+  font-size: 14px; color: var(--muted); line-height: 1.6;
+  max-width: 480px; margin-top: 12px;
+}
+.header-line {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, var(--orange), transparent);
+  margin: 20px 0 0;
+}
+
+/* HOW TO USE */
+.how-to {
+  background: var(--gold-dim);
+  border: 1px solid rgba(200,169,110,0.15);
+  border-left: 2px solid var(--gold);
+  border-radius: 10px; padding: 16px 20px;
+  margin-bottom: 48px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.how-to-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.how-to-text { font-size: 13px; color: var(--white); line-height: 1.65; }
+.how-to-text strong { color: var(--gold); }
+
+/* SECTION */
+.section { margin-bottom: 52px; }
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--border2);
+}
+.section-num {
+  font-family: 'Fraunces', serif;
+  font-size: 11px; font-weight: 500;
+  color: var(--orange); letter-spacing: 0.1em;
+  background: var(--orange-dim); border: 1px solid var(--orange-glow);
+  border-radius: 4px; padding: 3px 8px;
+}
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 500;
+  color: var(--white); letter-spacing: -0.01em;
+}
+.section-desc {
+  font-size: 12px; color: var(--muted);
+  line-height: 1.6; margin-bottom: 18px;
+  padding-left: 2px;
+}
+
+/* MESSAGE CARD */
+.msg-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  transition: border-color 0.25s;
+}
+.msg-card:hover { border-color: var(--border2); }
+
+.msg-header {
+  display: flex; justify-content: space-between;
+  align-items: center; padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.msg-scenario {
+  display: flex; align-items: center; gap: 10px; flex: 1;
+}
+.msg-tag {
+  font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.14em; padding: 3px 8px;
+  border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+}
+.tag-entry  { background: var(--orange-dim); color: var(--orange-soft); border: 1px solid var(--orange-glow); }
+.tag-follow { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(74,174,173,0.2); }
+.tag-close  { background: var(--green-dim); color: var(--green); border: 1px solid rgba(92,173,122,0.2); }
+.tag-noshow { background: var(--red-dim); color: var(--red); border: 1px solid rgba(201,96,96,0.2); }
+.tag-ref    { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(200,169,110,0.2); }
+.tag-nurture { background: var(--surface3); color: var(--muted); border: 1px solid var(--border2); }
+
+.msg-label {
+  font-size: 13px; font-weight: 500; color: var(--white);
+}
+.msg-condition {
+  font-size: 11px; color: var(--muted); margin-top: 1px;
+}
+
+.copy-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 7px; cursor: pointer;
+  color: var(--muted); font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 6px 12px; white-space: nowrap;
+  transition: all 0.2s; flex-shrink: 0;
+  display: flex; align-items: center; gap: 6px;
+}
+.copy-btn:hover { background: var(--surface3); color: var(--white); border-color: var(--border2); }
+.copy-btn.copied { background: var(--green-dim); color: var(--green); border-color: rgba(92,173,122,0.3); }
+.copy-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* WA BUBBLE */
+.msg-body { padding: 16px 18px; }
+.wa-bubble {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 14px 14px 14px 3px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--white);
+  white-space: pre-wrap;
+  word-break: break-word;
+  position: relative;
+}
+.wa-bubble .placeholder {
+  color: var(--orange-soft);
+  font-style: italic;
+}
+
+/* NOTES */
+.msg-note {
+  padding: 10px 18px 14px;
+  font-size: 12px; color: var(--muted);
+  line-height: 1.55; border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.msg-note-icon { flex-shrink: 0; opacity: 0.6; font-size: 11px; margin-top: 1px; }
+
+/* DIVIDER */
+.divider {
+  display: flex; align-items: center; gap: 14px;
+  margin: 8px 0 14px; color: var(--muted);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* VARIABLES GUIDE */
+.vars-box {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px; margin-bottom: 48px;
+}
+.vars-title {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--muted); margin-bottom: 12px;
+}
+.vars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.var-item {
+  display: flex; gap: 8px; align-items: baseline;
+}
+.var-code {
+  font-family: 'DM Sans', monospace; font-size: 12px;
+  color: var(--orange-soft); background: var(--orange-dim);
+  border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;
+}
+.var-desc { font-size: 12px; color: var(--muted); }
+
+/* FOOTER */
+.footer {
+  margin-top: 64px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 8px;
+}
+.footer-brand { font-size: 11px; color: var(--muted); }
+.footer-brand strong { color: var(--orange-soft); }
+
+/* TOAST */
+#toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--green); color: #0E1A12;
+  font-size: 13px; font-weight: 500;
+  padding: 10px 20px; border-radius: 100px;
+  opacity: 0; pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+  z-index: 10000; white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* SCROLL TOP */
+.scroll-top {
+  position: fixed; bottom: 32px; right: 32px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 50%; width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--muted); font-size: 16px;
+  transition: all 0.2s; z-index: 100;
+  opacity: 0; pointer-events: none;
+}
+.scroll-top.visible { opacity: 1; pointer-events: all; }
+.scroll-top:hover { color: var(--white); border-color: var(--border2); background: var(--surface3); }
+
+@media (max-width: 640px) {
+  .app { padding: 32px 20px 80px; }
+  .vars-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow">Galería Damel · Startop Consulting · Uso interno</div>
+    <div class="header-title">Script de <em>Ventas</em><br>por WhatsApp</div>
+    <div class="header-sub">Mensajes listos para usar una vez que el prospecto respondió el filtro inicial. Copia el mensaje, personaliza los datos en naranja y envía.</div>
+    <div class="header-line"></div>
+  </div>
+
+  <!-- HOW TO USE -->
+  <div class="how-to">
+    <div class="how-to-icon">💡</div>
+    <div class="how-to-text">
+      <strong>Cómo usar este recurso:</strong> Los textos en <strong style="color:var(--orange-soft)">[naranja]</strong> son variables que debes reemplazar con los datos reales del prospecto. Haz clic en <strong>Copiar mensaje</strong> y pégalo directo en WhatsApp. Ajusta el tono a tu estilo natural si lo necesitas.
+    </div>
+  </div>
+
+  <!-- VARIABLES REFERENCE -->
+  <div class="vars-box">
+    <div class="vars-title">Variables de referencia</div>
+    <div class="vars-grid">
+      <div class="var-item"><span class="var-code">[Nombre]</span><span class="var-desc">Nombre del prospecto</span></div>
+      <div class="var-item"><span class="var-code">[tipo de obra]</span><span class="var-desc">Pintura / escultura / gráfica</span></div>
+      <div class="var-item"><span class="var-code">[espacio]</span><span class="var-desc">Sala / comedor / recámara...</span></div>
+      <div class="var-item"><span class="var-code">[presupuesto]</span><span class="var-desc">Rango que indicó en el filtro</span></div>
+      <div class="var-item"><span class="var-code">[artista]</span><span class="var-desc">Nombre del artista sugerido</span></div>
+      <div class="var-item"><span class="var-code">[día/hora]</span><span class="var-desc">Propuesta de tiempo de llamada</span></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1 — ENTRADA -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Entrada — Primera respuesta de David</span>
+    </div>
+    <div class="section-desc">El prospecto respondió las tres preguntas del filtro automático. Este es el primer mensaje de David — tiene que ser directo, cálido y demostrar que ya leyó lo que dijeron.</div>
+
+    <!-- MSG 1.1 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-entry">Entrada</span>
+          <div>
+            <div class="msg-label">Respuesta estándar con propuesta directa</div>
+            <div class="msg-condition">Cuando el prospecto respondió las 3 preguntas con perfil claro</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">¡Qué tal, <span class="placeholder">[Nombre]</span>! Soy David de Galería Damel.
+
+Ya vi lo que me mandaste — buscas una <span class="placeholder">[tipo de obra]</span> para tu <span class="placeholder">[espacio]</span> con un presupuesto de <span class="placeholder">[presupuesto]</span>. Perfecto, con eso ya tengo en mente un par de opciones muy buenas.
+
+¿Tienes algún artista o estilo que ya te llame la atención, o prefieres que yo te oriente desde cero?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        La última pregunta tiene dos funciones: activa a quien ya sabe lo que quiere y califica la intención real del que está explorando. Si responde con algo concreto, hay compra potencial.
+      </div>
+    </div>
+
+    <!-- MSG 1.2 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-entry">Entrada</span>
+          <div>
+            <div class="msg-label">Propuesta inmediata con artista específico</div>
+            <div class="msg-condition">Cuando el perfil del prospecto conecta directamente con un artista de tu catálogo</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">¡Hola, <span class="placeholder">[Nombre]</span>! David de Galería Damel por aquí.
+
+Con lo que me compartiste — <span class="placeholder">[tipo de obra]</span> para <span class="placeholder">[espacio]</span>, presupuesto de <span class="placeholder">[presupuesto]</span> — tengo algo que creo que te va a encantar.
+
+Estoy trabajando con <span class="placeholder">[artista]</span>, un artista mexicano con una propuesta muy interesante. ¿Te comparto su trabajo para que veas si conecta contigo?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Este mensaje va cuando ya tienes claro qué artista encaja. No esperes a que pida recomendaciones — llegar con propuesta concreta demuestra que leíste su necesidad.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2 — SEGUIMIENTO -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Seguimiento — Después de compartir catálogo</span>
+    </div>
+    <div class="section-desc">El prospecto ya vio algunas obras. Estos mensajes sirven para reactivar la conversación cuando hay silencio o para empujar hacia el cierre.</div>
+
+    <!-- MSG 2.1 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-follow">Seguimiento</span>
+          <div>
+            <div class="msg-label">Check-in después de compartir catálogo</div>
+            <div class="msg-condition">24–48 horas sin respuesta después de haber enviado opciones</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">¿Qué onda, <span class="placeholder">[Nombre]</span>? ¿Pudiste ver las opciones que te mandé?
+
+Si algo te llamó la atención o tienes preguntas, con gusto te platico más a detalle. Y si no conectó del todo con lo que buscas, dime y busco otras opciones.</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Tono casual, sin presión. La segunda oración abre la puerta a que diga que no le gustó — eso es información valiosa, no un rechazo.
+      </div>
+    </div>
+
+    <!-- MSG 2.2 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-follow">Seguimiento</span>
+          <div>
+            <div class="msg-label">Propuesta de llamada rápida</div>
+            <div class="msg-condition">Cuando el prospecto mostró interés pero la conversación se está alargando sin avanzar</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">Oye, <span class="placeholder">[Nombre]</span>, a veces es más fácil en una llamada de 10 minutos. Así te puedo platicar un poco del artista, entendemos mejor el espacio y te doy una recomendación más exacta.
+
+¿Te acomoda algo el <span class="placeholder">[día/hora]</span>?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Mover a llamada es el paso más poderoso del proceso — en voz el cierre es mucho más natural. Propón día y hora específicos, no preguntes "¿cuándo puedes?".
+      </div>
+    </div>
+
+    <!-- MSG 2.3 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-follow">Seguimiento</span>
+          <div>
+            <div class="msg-label">Nueva obra disponible relevante</div>
+            <div class="msg-condition">Cuando consigues algo que encaja exactamente con lo que buscaba</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">¡Hola, <span class="placeholder">[Nombre]</span>! Me acordé de ti porque acabo de conseguir una obra de <span class="placeholder">[artista]</span> que creo que se ajusta muy bien a lo que me habías comentado para tu <span class="placeholder">[espacio]</span>.
+
+¿La veo o ya encontraste lo que buscabas?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Este mensaje reactiva conversaciones dormidas sin sonar desesperado. "Me acordé de ti" personaliza el contacto. La pregunta al final respeta su tiempo — puede que ya haya comprado.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3 — CIERRE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Cierre — Empujar hacia la decisión</span>
+    </div>
+    <div class="section-desc">El prospecto está interesado pero no ha confirmado. Estos mensajes ayudan a cerrar sin presionar.</div>
+
+    <!-- MSG 3.1 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-close">Cierre</span>
+          <div>
+            <div class="msg-label">Confirmación de disponibilidad</div>
+            <div class="msg-condition">Cuando el prospecto dijo que le gustó pero no ha confirmado la compra</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">Oye, <span class="placeholder">[Nombre]</span>, te comento que la obra de <span class="placeholder">[artista]</span> que estuvimos viendo la tengo disponible, pero no puedo garantizarla por mucho tiempo — estos trabajos se van rápido cuando los presento.
+
+¿Quieres que la apartemos? Platicamos lo que necesitas saber para confirmar.</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        La escasez es real en este negocio — no es presión artificial. Úsalo solo cuando sea verdad. La última pregunta abre un espacio de conversación sin exigir un "sí" inmediato.
+      </div>
+    </div>
+
+    <!-- MSG 3.2 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-close">Cierre</span>
+          <div>
+            <div class="msg-label">Respuesta a objeción de precio</div>
+            <div class="msg-condition">Cuando el prospecto dice que está fuera de su presupuesto o que es caro</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">Entiendo, <span class="placeholder">[Nombre]</span>. Déjame buscar opciones dentro de tu rango — seguro encontramos algo que también te guste.
+
+Una cosa que siempre le digo a la gente: una obra de un artista mexicano con trayectoria no es un gasto, es algo que va a estar en tu espacio por años y que con el tiempo vale más. Pero bueno, vamos por lo que se acomode.
+
+¿Me confirmas hasta cuánto puedes moverte para buscarte algo a modo?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        No discutes el precio, lo rediriges. El argumento de valor a largo plazo funciona bien con este perfil. La pregunta al final mueve la conversación hacia un acuerdo posible.
+      </div>
+    </div>
+
+    <!-- MSG 3.3 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-close">Cierre</span>
+          <div>
+            <div class="msg-label">Respuesta a "lo voy a pensar"</div>
+            <div class="msg-condition">Cuando el prospecto pide tiempo para decidir</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">Sin problema, <span class="placeholder">[Nombre]</span>, tómate el tiempo que necesites.
+
+Si tienes alguna duda mientras lo piensas — del artista, del proceso de entrega, de lo que sea — mándame mensaje y te respondo. No hay presión de mi parte.</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Soltar la presión en este momento genera más confianza que insistir. Muchos cierres llegan días después de este mensaje exacto. Si no responde en una semana, puedes usar el mensaje de "nueva obra disponible" de la sección 2.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4 — SIN RESPUESTA -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Sin respuesta — Retarget</span>
+    </div>
+    <div class="section-desc">El prospecto llegó por el anuncio, respondió el filtro, pero después dejó de contestar. Un solo intento de reactivación.</div>
+
+    <!-- MSG 4.1 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-noshow">Sin respuesta</span>
+          <div>
+            <div class="msg-label">Retarget a las 48 horas</div>
+            <div class="msg-condition">El prospecto no respondió después del primer mensaje de David</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">¡Hola, <span class="placeholder">[Nombre]</span>! Solo quería saber si sigues buscando. Si sí, con gusto te ayudo a encontrar algo. Si no, no hay problema.</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Corto y sin presión. Si no responde este mensaje, no insistas más — descártalo del flujo activo. Puedes pedirle el correo si responde que ya no está buscando: "Sin problema. ¿Te agrego a mi lista para avisarte cuando lleguen obras nuevas?"
+      </div>
+    </div>
+
+    <!-- MSG 4.2 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-noshow">Sin respuesta</span>
+          <div>
+            <div class="msg-label">Captura de correo para Klaviyo</div>
+            <div class="msg-condition">Cuando el prospecto indica que ya no está buscando o que no es el momento</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">Sin problema, <span class="placeholder">[Nombre]</span>. Si quieres te agrego a mi lista y te voy avisando cuando lleguen obras nuevas — así cuando estés listo ya tienes por dónde empezar. ¿Me compartes tu correo?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Este mensaje convierte un prospecto no listo en un contacto de Klaviyo. Registra el correo manualmente en tu lista. El flujo automático hace el resto.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5 — REFERIDOS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Referidos — Post-venta</span>
+    </div>
+    <div class="section-desc">Enviar después de confirmar que el cliente recibió su obra y quedó satisfecho. Es el único momento en que pedir una referencia se siente natural.</div>
+
+    <!-- MSG 5.1 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-ref">Referido</span>
+          <div>
+            <div class="msg-label">Solicitud de referido post-compra</div>
+            <div class="msg-condition">Después de confirmar que el cliente recibió y está contento con su obra</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble"><span class="placeholder">[Nombre]</span>, me da mucho gusto que hayas quedado contento con tu obra. Oye, una pregunta: si conoces a alguien que esté decorando un espacio o que tenga ganas de tener una obra original en casa, me ayudaría mucho que me recomendaras. No tiene que saber nada de arte — yo me encargo de orientarlo desde cero. Con que me pases su contacto o le compartas el mío es suficiente. Te lo agradezco mucho.</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        Enviar una vez por cliente, sin hacer seguimiento sobre este mensaje. Si el cliente quiere referir, lo hará. No insistir.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6 — NURTURING -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Nurturing — Mantener contacto con clientes activos</span>
+    </div>
+    <div class="section-desc">Para clientes que ya te compraron y con quienes quieres mantener una relación activa sin presionar.</div>
+
+    <!-- MSG 6.1 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-nurture">Nurturing</span>
+          <div>
+            <div class="msg-label">Invitación a evento o subasta</div>
+            <div class="msg-condition">Cuando tienes un evento próximo y quieres avisar a clientes anteriores</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">¡Hola, <span class="placeholder">[Nombre]</span>! Te cuento que voy a estar en una subasta el <span class="placeholder">[día/hora]</span> con obras muy interesantes. Si quieres te paso información para que te vayas dando una idea de lo que va a estar. Sin compromiso, nada más por si algo te llama la atención.</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        "Sin compromiso" quita la presión y hace que la invitación se sienta genuina. Muchas ventas de subasta vienen de este tipo de contacto previo.
+      </div>
+    </div>
+
+    <!-- MSG 6.2 -->
+    <div class="msg-card">
+      <div class="msg-header">
+        <div class="msg-scenario">
+          <span class="msg-tag tag-nurture">Nurturing</span>
+          <div>
+            <div class="msg-label">Acceso anticipado a obra nueva</div>
+            <div class="msg-condition">Cuando consigues obra exclusiva y quieres ofrecérsela primero a clientes de confianza</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick="copyMsg(this)">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>
+          Copiar
+        </button>
+      </div>
+      <div class="msg-body">
+        <div class="wa-bubble">Oye, <span class="placeholder">[Nombre]</span>, antes de publicar esto te lo paso a ti primero. Acabo de conseguir una obra de <span class="placeholder">[artista]</span> que me pareció que podría interesarte. ¿La ves?</div>
+      </div>
+      <div class="msg-note">
+        <span class="msg-note-icon">→</span>
+        "Antes de publicar esto te lo paso a ti primero" es el incentivo de acceso anticipado. Genera exclusividad real sin costo operativo. Úsalo con clientes que compraron antes y con quienes ya tienes relación.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">Galería Damel · Script de Ventas · <strong>Startop Consulting 2026</strong></div>
+    <div style="font-size:11px;color:var(--muted)">Uso interno · Confidencial</div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast">✓ Mensaje copiado</div>
+
+<!-- SCROLL TOP -->
+<div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script>
+function copyMsg(btn) {
+  const card = btn.closest('.msg-card');
+  const bubble = card.querySelector('.wa-bubble');
+
+  // Get text replacing spans with their text content
+  let text = bubble.innerText || bubble.textContent;
+
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l4 4 6-6"/></svg>Copiado`;
+
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M3 11V3a2 2 0 012-2h8"/></svg>Copiar`;
+      toast.classList.remove('show');
+    }, 2000);
+  }).catch(() => {
+    // Fallback
+    const range = document.createRange();
+    range.selectNode(bubble);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+  });
+}
+
+// Scroll top visibility
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTop');
+  btn.classList.toggle('visible', window.scrollY > 300);
+});
+</script>
+
+</body>
+</html>
